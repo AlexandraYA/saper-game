@@ -20,7 +20,7 @@ const useLayoutStyles = () => {
     height: 80px;
     padding: 0 25px;
 
-    h1 {
+    h1 > a {
       text-decoration: none;
     }
   `
@@ -36,7 +36,10 @@ const useLayoutStyles = () => {
     & > li {
       padding: 0;
       margin: 0 0 0 15px;
-      text-decoration: none;
+
+      & > a {
+        text-decoration: none;
+      }
     }
   `
 

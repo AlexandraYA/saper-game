@@ -1,4 +1,7 @@
-export const settings = {
+import { TLevels, TFieldKey } from "./types"
+
+
+const settings: TLevels = {
   junior: {
     rows: 9,
     cols: 9,
@@ -15,3 +18,7 @@ export const settings = {
     mines: 99
   }
 }
+
+const defaultLevel: TFieldKey = "junior"
+
+export { settings, defaultLevel }

@@ -2,10 +2,8 @@
 import React, { ReactElement } from "react"
 import { useLayoutStyles } from "./Layout.style"
 import { Link } from 'react-router-dom'
+import { ILayout } from "../../store/types"
 
-interface ILayout {
-  children: ReactElement;
-}
 
 const Layout: React.FC<ILayout> = ({ children }) => {
 
