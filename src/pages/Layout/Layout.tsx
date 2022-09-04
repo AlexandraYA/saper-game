@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React, { ReactElement } from "react"
 import { useLayoutStyles } from "./Layout.style"
+import { Link } from 'react-router-dom'
 
 interface ILayout {
   children: ReactElement;
@@ -10,19 +11,19 @@ const Layout: React.FC<ILayout> = ({ children }) => {
 
   const style = useLayoutStyles()
 
-  console.log(style.container)
-
   return (
     <div css={style.layout}>
       <div css={style.container}>
         <header css={style.header}>
-          <h2>Игра Сапер</h2>
+          <h2>
+            <Link to="/">Игра Сапер</Link>
+          </h2>
           <nav>
             <ul css={style.menu}>
-              <li><a href="/">Новичок</a></li>
-              <li><a href="/">Любитель</a></li>
-              <li><a href="/">Профессионал</a></li>
-              <li><a href="/">Как играть</a></li>
+              <li><Link to="/junior">Новичок</Link></li>
+              <li><Link to="/amateur">Любитель</Link></li>
+              <li><Link to="/profi">Профессионал</Link></li>
+              <li><Link to="/about">Как играть</Link></li>
             </ul>
           </nav>
         </header>

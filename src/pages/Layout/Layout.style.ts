@@ -19,6 +19,10 @@ const useLayoutStyles = () => {
     justify-content: space-between;
     height: 80px;
     padding: 0 25px;
+
+    h1 {
+      text-decoration: none;
+    }
   `
   
   const menu = css`
@@ -32,6 +36,7 @@ const useLayoutStyles = () => {
     & > li {
       padding: 0;
       margin: 0 0 0 15px;
+      text-decoration: none;
     }
   `
 
