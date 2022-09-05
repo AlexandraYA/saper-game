@@ -13,7 +13,7 @@ const getRandCellArr = (amount: number, maxValue: number): number[] => {
 
     rands.push(newInd)
   }
-  console.log("rands = ", rands)
+
   return rands
 }
 
@@ -28,6 +28,8 @@ const prepareField = (settings: TSettings) => {
     for (let y = 0; y < settings.cols; y++) {
       row.push({
         mark: null,
+        x,
+        y, 
         indicator: mines.includes(settings.cols*x+y) ? 9 : 0,
         ifOpen: false
       })
@@ -35,7 +37,43 @@ const prepareField = (settings: TSettings) => {
     field.push(row)
   }
 
-  console.log("field = ", field)
+  for (let x = 0; x < field.length; x++) {
+    for (let y = 0; y < field[x].length; y++) {
+      if (field[x][y].indicator === 9) {
+        if (x > 0 && field[x-1][y].indicator !== 9) {
+          field[x-1][y].indicator++
+        }
+
+        if (x > 0 && y < field[x].length - 1 && field[x-1][y+1].indicator !== 9) {
+          field[x-1][y+1].indicator++
+        }
+
+        if (x > 0 && y > 0 && field[x-1][y-1].indicator !== 9) {
+          field[x-1][y-1].indicator++
+        }
+
+        if (y < field[x].length - 1 && field[x][y+1].indicator !== 9) {
+          field[x][y+1].indicator++
+        }
+
+        if (y > 0 && field[x][y-1].indicator !== 9) {
+          field[x][y-1].indicator++
+        }
+
+        if (x < field.length - 1 && field[x+1][y].indicator !== 9) {
+          field[x+1][y].indicator++
+        }
+
+        if (x < field.length - 1 && y < field[x].length - 1 && field[x+1][y+1].indicator !== 9) {
+          field[x+1][y+1].indicator++
+        }
+
+        if (x < field.length - 1 && y > 0 && field[x+1][y-1].indicator !== 9) {
+          field[x+1][y-1].indicator++
+        }
+      }
+    }
+  }
 
   return field
 }

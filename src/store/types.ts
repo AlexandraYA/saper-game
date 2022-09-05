@@ -20,6 +20,8 @@ export type TFieldKey = keyof TLevels
 
 export type TCell = {
   mark: string | null;
+  x: number;
+  y: number;
   indicator: number;
   ifOpen: boolean;
 }

@@ -44,6 +44,8 @@ const useGameStyles = (cols: number) => {
   `
 
   const cell = css`
+    text-align: center;
+    line-height: 30px;
     width: 30px;
     height: 30px;
     outline: 1px solid #b3a588;
