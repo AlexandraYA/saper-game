@@ -46,12 +46,15 @@ const useGameStyles = (cols: number) => {
   const cell = css`
     width: 30px;
     height: 30px;
-    border-right: 5px solid #b3a588;
     outline: 1px solid #b3a588;
-    border-top: 5px solid #f3e2be;
-    border-left: 5px solid #f3e2be;
-    border-bottom: 5px solid #b3a588;
     background-color: #edd197;
+
+    &.close {
+      border-right: 5px solid #b3a588;
+      border-top: 5px solid #f3e2be;
+      border-left: 5px solid #f3e2be;
+      border-bottom: 5px solid #b3a588;
+    }
 
     &:hover {
       cursor: pointer;

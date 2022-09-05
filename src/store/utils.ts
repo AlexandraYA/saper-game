@@ -5,7 +5,13 @@ const getRandCellArr = (amount: number, maxValue: number): number[] => {
   const rands: number[] = []
   
   for (let i = 0; i < amount; i++) {
-    rands.push(Math.round(Math.random() * maxValue))
+    let newInd = Math.round(Math.random() * maxValue)
+
+    while (rands.includes(newInd)) {
+      newInd = Math.round(Math.random() * maxValue)
+    }
+
+    rands.push(newInd)
   }
   console.log("rands = ", rands)
   return rands
@@ -22,7 +28,7 @@ const prepareField = (settings: TSettings) => {
     for (let y = 0; y < settings.cols; y++) {
       row.push({
         mark: null,
-        indicator: mines.includes((x+1)*y) ? 9 : 0,
+        indicator: mines.includes(settings.cols*x+y) ? 9 : 0,
         ifOpen: false
       })
     }

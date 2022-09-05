@@ -7,6 +7,7 @@ import { TSettings, TFieldKey, TCell } from '../../store/types'
 import { useGameStyles } from './Game.style'
 import ClockIcon from '../../assets/img/clock.png'
 import MineIcon from '../../assets/img/mine.png'
+import FlagIcon from '../../assets/img/flag.png'
 
 
 const Game: React.FC = () => {
@@ -33,7 +34,7 @@ const Game: React.FC = () => {
     <div>
       <div css={style.fieldHeader}>
         <div>
-          <img src={MineIcon} alt="flag"/>
+          <img src={FlagIcon} alt="flag"/>
           <span>{minesCounter}</span>
         </div>
         <div>
@@ -44,7 +45,9 @@ const Game: React.FC = () => {
       <div css={style.field}>
         {field.map((row: TCell[], ind: number) => {
           return row.map((cell: TCell, colInd: number) => (
-            <div key={ind+colInd} css={style.cell}></div>
+            <div key={ind+colInd} css={style.cell}>{
+              cell.indicator === 9 ? <img src={MineIcon} alt="mine"/> : ""
+            }</div>
           ))
         })}
       </div>
