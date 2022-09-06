@@ -17,9 +17,11 @@ const MineImage = () => (
 const Game: React.FC = () => {
   const { levelCode } = useParams()
   const [ field, setField ] = useState<TCell[][]>([])
+  const [ minesCoords, setMinesCoords ] = useState<number[][]>([])
   const [ curSettings, setCurSettings ] = useState<TSettings>()
   const [ minesCounter, setMinesCounter ] = useState<number>(0)
   const [ timer, setTimer ] = useState<number>(0)
+  const [ gameOver, setGameOver ] = useState<boolean>(false)
 
   const style = useGameStyles(curSettings?.cols ? curSettings.cols : settings[defaultLevel].cols)
 
@@ -30,13 +32,27 @@ const Game: React.FC = () => {
 
     setCurSettings(_curSettings)
     setMinesCounter(_curSettings?.mines)
-    setField(prepareField(_curSettings))
+
+    let result = prepareField(_curSettings)
+    setField(result.field as TCell[][])
+    setMinesCoords(result.minesCoords as number[][])
   },[levelCode])
 
 
   const handleClick = (cell: TCell) => {
+    if (gameOver) return
+
     const _field = [...field]
-    _field[cell.x][cell.y].ifOpen = true
+
+    if (_field[cell.x][cell.y].indicator === 9) {
+      for (let i = 0; i < minesCoords.length; i++) {
+        _field[minesCoords[i][0]][minesCoords[i][1]].ifOpen = true
+      }
+      setGameOver(true)
+    } else {
+      _field[cell.x][cell.y].ifOpen = true
+    }    
+    
     setField(_field)
   }  
 
@@ -65,7 +81,7 @@ const Game: React.FC = () => {
       <div css={style.field}>
         {field.map((row: TCell[], ind: number) => {
           return row.map((cell: TCell, colInd: number) => (
-            <div key={ind+colInd} css={style.cell} onClick={() => handleClick(cell)}>
+            <div key={ind+colInd} css={[style.cell, cell.ifOpen ? style.cellOpen : ""]} onClick={() => handleClick(cell)}>
               {cell.indicator === 9 ? <MineImage /> : getCellInner(cell.indicator)}
             </div>
           ))

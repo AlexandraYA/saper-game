@@ -18,19 +18,25 @@ const getRandCellArr = (amount: number, maxValue: number): number[] => {
 }
 
 
-const prepareField = (settings: TSettings) => {
+const prepareField = (settings: TSettings): Record<string, TCell[][] | number[][]> => {
 
   const mines = getRandCellArr(settings.mines, settings.rows*settings.cols-1)
   let field: TCell[][] = []
+  let minesCoords: number[][] = []
 
   for (let x = 0; x < settings.rows; x++) {
     let row: TCell[] = []
     for (let y = 0; y < settings.cols; y++) {
+      let coordsInd = settings.cols*x+y
+      if (mines.includes(coordsInd)) {
+        minesCoords.push([x,y])
+      }
+
       row.push({
         mark: null,
         x,
         y, 
-        indicator: mines.includes(settings.cols*x+y) ? 9 : 0,
+        indicator: mines.includes(coordsInd) ? 9 : 0,
         ifOpen: false
       })
     }
@@ -75,7 +81,7 @@ const prepareField = (settings: TSettings) => {
     }
   }
 
-  return field
+  return {field, minesCoords}
 }
 
 export { getRandCellArr, prepareField }

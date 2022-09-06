@@ -63,10 +63,15 @@ const useGameStyles = (cols: number) => {
     }
   `
 
+  const cellOpen = css`
+    background-color: green;
+  `
+
   return {
     field,
     fieldHeader,
-    cell
+    cell,
+    cellOpen
   }
 }
 
