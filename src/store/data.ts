@@ -22,5 +22,6 @@ const settings: TLevels = {
 const defaultLevel: TFieldKey = "junior"
 
 const mineIndicator = 9
+const emptyIndicator = 0
 
-export { settings, defaultLevel, mineIndicator }
+export { settings, defaultLevel, mineIndicator, emptyIndicator }

@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { settings, defaultLevel, mineIndicator } from '../../store/data'
-import { prepareField } from '../../store/utils'
+import { settings, defaultLevel, mineIndicator, emptyIndicator } from '../../store/data'
+import { prepareField, setOpenFields } from '../../store/utils'
 import { TSettings, TFieldKey, TCell } from '../../store/types'
 import { useGameStyles } from './Game.style'
 import ClockIcon from '../../assets/img/clock.png'
@@ -42,16 +42,19 @@ const Game: React.FC = () => {
   const handleClick = (cell: TCell) => {
     if (gameOver) return
 
-    const _field = [...field]
+    let _field = [...field]
 
-    if (_field[cell.x][cell.y].indicator === 9) {
+    if (_field[cell.x][cell.y].indicator === mineIndicator) {
       for (let i = 0; i < minesCoords.length; i++) {
         _field[minesCoords[i][0]][minesCoords[i][1]].ifOpen = true
       }
       setGameOver(true)
+
+    } else if (_field[cell.x][cell.y].indicator === emptyIndicator) {
+      _field = setOpenFields(cell, _field)
     } else {
       _field[cell.x][cell.y].ifOpen = true
-    }    
+    }  
     
     setField(_field)
   }  
