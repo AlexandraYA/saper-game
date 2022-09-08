@@ -36,6 +36,7 @@ const Game: React.FC = () => {
     let result = prepareField(_curSettings)
     setField(result.field as TCell[][])
     setMinesCoords(result.minesCoords as number[][])
+    setGameOver(false)
   },[levelCode])
 
 

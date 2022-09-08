@@ -44,40 +44,52 @@ const prepareField = (settings: TSettings): Record<string, TCell[][] | number[][
     field.push(row)
   }
 
+
+  let x = minesCoords[0][0]
+  let y = minesCoords[0][1]
+
+  for (let i = 0; i < settings.mines; i++) {
+
+    x = minesCoords[i][0]
+    y = minesCoords[i][1]
+
+    if (x > 0 && field[x-1][y].indicator !== 9) {
+      field[x-1][y].indicator++
+    }
+
+    if (x > 0 && y < field[x].length - 1 && field[x-1][y+1].indicator !== 9) {
+      field[x-1][y+1].indicator++
+    }
+
+    if (x > 0 && y > 0 && field[x-1][y-1].indicator !== 9) {
+      field[x-1][y-1].indicator++
+    }
+
+    if (y < field[x].length - 1 && field[x][y+1].indicator !== 9) {
+      field[x][y+1].indicator++
+    }
+
+    if (y > 0 && field[x][y-1].indicator !== 9) {
+      field[x][y-1].indicator++
+    }
+
+    if (x < field.length - 1 && field[x+1][y].indicator !== 9) {
+      field[x+1][y].indicator++
+    }
+
+    if (x < field.length - 1 && y < field[x].length - 1 && field[x+1][y+1].indicator !== 9) {
+      field[x+1][y+1].indicator++
+    }
+
+    if (x < field.length - 1 && y > 0 && field[x+1][y-1].indicator !== 9) {
+      field[x+1][y-1].indicator++
+    }
+  }
+
   for (let x = 0; x < field.length; x++) {
     for (let y = 0; y < field[x].length; y++) {
       if (field[x][y].indicator === 9) {
-        if (x > 0 && field[x-1][y].indicator !== 9) {
-          field[x-1][y].indicator++
-        }
-
-        if (x > 0 && y < field[x].length - 1 && field[x-1][y+1].indicator !== 9) {
-          field[x-1][y+1].indicator++
-        }
-
-        if (x > 0 && y > 0 && field[x-1][y-1].indicator !== 9) {
-          field[x-1][y-1].indicator++
-        }
-
-        if (y < field[x].length - 1 && field[x][y+1].indicator !== 9) {
-          field[x][y+1].indicator++
-        }
-
-        if (y > 0 && field[x][y-1].indicator !== 9) {
-          field[x][y-1].indicator++
-        }
-
-        if (x < field.length - 1 && field[x+1][y].indicator !== 9) {
-          field[x+1][y].indicator++
-        }
-
-        if (x < field.length - 1 && y < field[x].length - 1 && field[x+1][y+1].indicator !== 9) {
-          field[x+1][y+1].indicator++
-        }
-
-        if (x < field.length - 1 && y > 0 && field[x+1][y-1].indicator !== 9) {
-          field[x+1][y-1].indicator++
-        }
+        
       }
     }
   }
@@ -92,8 +104,8 @@ const ifNotMineOrEmpty = (indicator: number): boolean => {
 
 const setOpenFields = (touchedCell: TCell, field: TCell[][]): TCell[][] => {
   
-  const maxY = field[0].length
   const maxX = field.length
+  const maxY = field[0].length
 
   const queue: {x: number, y: number}[] = [{
     x: touchedCell.x,
