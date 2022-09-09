@@ -53,7 +53,7 @@ const useLayoutStyles = () => {
     left: 0;
     width: 100%;
     text-align: center;
-    padding: 25px;
+    padding: 10px;
     margin: 0;
   `
 

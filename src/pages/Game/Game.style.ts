@@ -1,4 +1,6 @@
 import { css } from "@emotion/react"
+import FailIcon from '../../assets/img/disappointed.png'
+import WinIcon from '../../assets/img/happy.png'
 
 
 const useGameStyles = (cols: number) => {
@@ -13,12 +15,15 @@ const useGameStyles = (cols: number) => {
     width: ${fieldF}px;
     gap: 1px;
     border: 2px solid #b3a588;
+    margin-bottom: 50px;
   `
 
   const fieldHeader = css`
     display: flex;
     justify-content: space-between;
+    align-items: center;
     width: ${fieldF}px;
+    height: 50px;
     padding: 5px;
     border: 4px solid #b3a588;
     border-bottom: 1px solid #b3a588;
@@ -29,8 +34,8 @@ const useGameStyles = (cols: number) => {
     line-height: 24px;
 
     & img {
-      width: 28px;
-      height: 28px;
+      width: 30px;
+      height: 30px;
       vertical-align: bottom;
     }
 
@@ -50,6 +55,7 @@ const useGameStyles = (cols: number) => {
     height: 30px;
     outline: 1px solid #b3a588;
     background-color: #edd197;
+    transition: all 0.3s ease;
 
     &.close {
       border-right: 5px solid #b3a588;
@@ -67,11 +73,37 @@ const useGameStyles = (cols: number) => {
     background-color: green;
   `
 
+  const btnRestart = css`
+    width: 30px;
+    height: 30px;
+    border: none;
+    box-shadow: 0 0 6px rgba(0,0,0,0.6);
+    transition: all 0.3s ease;
+
+    &.win {
+      background: transparent url(${WinIcon}) 50% 50% / contain no-repeat;
+    }
+
+    &.fail {
+      background: transparent url(${FailIcon}) 50% 50% / contain no-repeat;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &:active {
+      cursor: pointer;
+      box-shadow: none;
+    }
+  `
+
   return {
     field,
     fieldHeader,
     cell,
-    cellOpen
+    cellOpen,
+    btnRestart
   }
 }
 

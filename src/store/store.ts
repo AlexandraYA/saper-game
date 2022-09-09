@@ -13,6 +13,7 @@ class SaperStore {
   minesCoords: number[][] = []
   lvlSettings: TSettings = settings[defaultLevel]
 
+
   constructor() {
     makeAutoObservable(this)
 
@@ -20,14 +21,14 @@ class SaperStore {
     this.checkCell = this.checkCell.bind(this)
   }
 
-  prepareGame(levelCode: string) {
-    console.log(this.lvlSettings)
+  prepareGame(levelCode: string = defaultLevel) {
     this.lvlSettings = settings[levelCode as TFieldKey]
     this.minesCounter = this.lvlSettings.mines
     let result = prepareField(this.lvlSettings)
     this.field = result.field as TCell[][]
     this.minesCoords = result.minesCoords as number[][]
     this.gameOver = false
+    this.openedCells = 0
   }
 
   checkCell(cell: TCell) {
@@ -38,14 +39,19 @@ class SaperStore {
       this.gameOver = true
 
     } else if (this.field[cell.x][cell.y].indicator === emptyIndicator) {
-      this.field = setOpenFields(cell, this.field)
+      this.openedCells += setOpenFields(cell, this.field)
     } else {
       this.field[cell.x][cell.y].ifOpen = true
+      this.openedCells++
+    }
+
+    if (this.ifUserWin) {
+      this.gameOver = true
     }
   }
 
-  get checkIfUserWin() {
-    return this.field.length * this.field[0].length - this.lvlSettings.mines === this.openedCells
+  get ifUserWin() {
+    return this.lvlSettings.rows * this.lvlSettings.cols - this.lvlSettings.mines === this.openedCells
   }
 }
 

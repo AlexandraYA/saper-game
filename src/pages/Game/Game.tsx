@@ -16,15 +16,13 @@ const MineImage = () => (
 
 const Game: React.FC = observer(() => {
   const { levelCode } = useParams()
-  const { prepareGame, lvlSettings, gameOver,
-    field, minesCounter, timer, checkCell  } = saperStore
+  const { prepareGame, lvlSettings, gameOver, 
+    field, minesCounter, timer, checkCell, ifUserWin  } = saperStore
   
   const style = useGameStyles(lvlSettings.cols)
 
   useEffect(() => {
-    if (!!levelCode) {
-      prepareGame(levelCode)
-    }    
+    prepareGame(levelCode)
   },[levelCode])
 
   const handleClick = (cell: TCell) => {
@@ -50,6 +48,9 @@ const Game: React.FC = observer(() => {
           <img src={FlagIcon} alt="flag"/>
           <span>{minesCounter}</span>
         </div>
+        {!!gameOver && <div>
+          <button css={style.btnRestart} className={ifUserWin ? "win": "fail"} />
+        </div>}
         <div>
           <span>{timer}</span>
           <img src={ClockIcon} alt="timer"/>

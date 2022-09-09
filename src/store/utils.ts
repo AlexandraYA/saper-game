@@ -86,26 +86,19 @@ const prepareField = (settings: TSettings): Record<string, TCell[][] | number[][
     }
   }
 
-  for (let x = 0; x < field.length; x++) {
-    for (let y = 0; y < field[x].length; y++) {
-      if (field[x][y].indicator === 9) {
-        
-      }
-    }
-  }
-
   return {field, minesCoords}
 }
 
 
-const ifNotMineOrEmpty = (indicator: number): boolean => {
-  return indicator > emptyIndicator && indicator < mineIndicator
+const ifNotMineOrEmpty = (cell: TCell): boolean => {
+  return cell.indicator > emptyIndicator && cell.indicator < mineIndicator && !cell.ifOpen
 }
 
-const setOpenFields = (touchedCell: TCell, field: TCell[][]): TCell[][] => {
+const setOpenFields = (touchedCell: TCell, field: TCell[][]): number => {
   
   const maxX = field.length
   const maxY = field[0].length
+  let openedCells = 0
 
   const queue: {x: number, y: number}[] = [{
     x: touchedCell.x,
@@ -122,25 +115,29 @@ const setOpenFields = (touchedCell: TCell, field: TCell[][]): TCell[][] => {
 
       if (!field[curCell.x][curCell.y].ifOpen) {
         field[curCell.x][curCell.y].ifOpen = true
+        openedCells++
       }
 
       if (curCell.x+1 < maxX) {
         if (curCell.y-1 > -1) {
-          if (ifNotMineOrEmpty(field[curCell.x+1][curCell.y-1].indicator)) {
+          if (ifNotMineOrEmpty(field[curCell.x+1][curCell.y-1])) {
             field[curCell.x+1][curCell.y-1].ifOpen = true
+            openedCells++
           }
         }
 
         if (field[curCell.x+1][curCell.y].indicator === emptyIndicator && !field[curCell.x+1][curCell.y].ifOpen) {
           queue.push({x: curCell.x + 1, y: curCell.y}) 
 
-        } else if (ifNotMineOrEmpty(field[curCell.x+1][curCell.y].indicator)) {
+        } else if (ifNotMineOrEmpty(field[curCell.x+1][curCell.y])) {
           field[curCell.x+1][curCell.y].ifOpen = true
+          openedCells++
         }
 
         if (curCell.y+1 < maxY) {
-          if (ifNotMineOrEmpty(field[curCell.x+1][curCell.y+1].indicator)) {
+          if (ifNotMineOrEmpty(field[curCell.x+1][curCell.y+1])) {
             field[curCell.x+1][curCell.y+1].ifOpen = true
+            openedCells++
           }
         }
       }
@@ -149,28 +146,32 @@ const setOpenFields = (touchedCell: TCell, field: TCell[][]): TCell[][] => {
         if (field[curCell.x][curCell.y+1].indicator === emptyIndicator && !field[curCell.x][curCell.y+1].ifOpen) {
           queue.push({x: curCell.x, y: curCell.y + 1})
 
-        } else if (ifNotMineOrEmpty(field[curCell.x][curCell.y+1].indicator)) {
+        } else if (ifNotMineOrEmpty(field[curCell.x][curCell.y+1])) {
           field[curCell.x][curCell.y+1].ifOpen = true
+          openedCells++
         }
       }
 
       if (curCell.x-1 > -1) {
         if (curCell.y+1 < maxY) {
-          if (ifNotMineOrEmpty(field[curCell.x-1][curCell.y+1].indicator)) {
+          if (ifNotMineOrEmpty(field[curCell.x-1][curCell.y+1])) {
             field[curCell.x-1][curCell.y+1].ifOpen = true
+            openedCells++
           }
         }
         
         if (field[curCell.x-1][curCell.y].indicator === emptyIndicator && !field[curCell.x-1][curCell.y].ifOpen) {
           queue.push({x: curCell.x-1, y: curCell.y})
 
-        } else if (ifNotMineOrEmpty(field[curCell.x-1][curCell.y].indicator)) {
+        } else if (ifNotMineOrEmpty(field[curCell.x-1][curCell.y])) {
           field[curCell.x-1][curCell.y].ifOpen = true
+          openedCells++
         }
 
         if (curCell.y-1 > -1) {
-          if (ifNotMineOrEmpty(field[curCell.x-1][curCell.y-1].indicator)) {
+          if (ifNotMineOrEmpty(field[curCell.x-1][curCell.y-1])) {
             field[curCell.x-1][curCell.y-1].ifOpen = true
+            openedCells++
           }
         }
       }
@@ -179,14 +180,15 @@ const setOpenFields = (touchedCell: TCell, field: TCell[][]): TCell[][] => {
         if (field[curCell.x][curCell.y-1].indicator === emptyIndicator && !field[curCell.x][curCell.y-1].ifOpen) {
           queue.push({x: curCell.x, y: curCell.y-1})
 
-        } else if (ifNotMineOrEmpty(field[curCell.x][curCell.y-1].indicator)) {
+        } else if (ifNotMineOrEmpty(field[curCell.x][curCell.y-1])) {
           field[curCell.x][curCell.y-1].ifOpen = true
+          openedCells++
         }
       }
     }
   } 
 
-  return field
+  return openedCells
 }
 
 export { getRandCellArr, prepareField, setOpenFields }
