@@ -1,5 +1,5 @@
 import { TSettings, TCell } from "./types"
-import { mineIndicator, emptyIndicator } from './data'
+import { mineIndicator, emptyIndicator, MARKS } from './data'
 
 
 const getRandCellArr = (amount: number, maxValue: number): number[] => {
@@ -94,11 +94,22 @@ const ifNotMineOrEmpty = (cell: TCell): boolean => {
   return cell.indicator > emptyIndicator && cell.indicator < mineIndicator && !cell.ifOpen
 }
 
-const setOpenFields = (touchedCell: TCell, field: TCell[][]): number => {
+const setOpenFields = (touchedCell: TCell, field: TCell[][]): Record<string, number> => {
   
   const maxX = field.length
   const maxY = field[0].length
   let openedCells = 0
+  let flags = 0
+
+  const changeCellSettings = (x: number, y: number) => {
+    field[x][y].ifOpen = true
+    openedCells++
+
+    if (field[x][y].mark === MARKS.FLAG) {
+      field[x][y].mark = null
+      flags++
+    }
+  }
 
   const queue: {x: number, y: number}[] = [{
     x: touchedCell.x,
@@ -114,81 +125,80 @@ const setOpenFields = (touchedCell: TCell, field: TCell[][]): number => {
     if (!!curCell) {
 
       if (!field[curCell.x][curCell.y].ifOpen) {
-        field[curCell.x][curCell.y].ifOpen = true
-        openedCells++
+        changeCellSettings(curCell.x, curCell.y)
       }
 
       if (curCell.x+1 < maxX) {
         if (curCell.y-1 > -1) {
           if (ifNotMineOrEmpty(field[curCell.x+1][curCell.y-1])) {
-            field[curCell.x+1][curCell.y-1].ifOpen = true
-            openedCells++
+            changeCellSettings(curCell.x+1, curCell.y-1)
           }
         }
 
-        if (field[curCell.x+1][curCell.y].indicator === emptyIndicator && !field[curCell.x+1][curCell.y].ifOpen) {
+        if (field[curCell.x+1][curCell.y].indicator === emptyIndicator
+            && !field[curCell.x+1][curCell.y].ifOpen) {
+
           queue.push({x: curCell.x + 1, y: curCell.y}) 
 
         } else if (ifNotMineOrEmpty(field[curCell.x+1][curCell.y])) {
-          field[curCell.x+1][curCell.y].ifOpen = true
-          openedCells++
+          changeCellSettings(curCell.x+1, curCell.y)
         }
 
         if (curCell.y+1 < maxY) {
           if (ifNotMineOrEmpty(field[curCell.x+1][curCell.y+1])) {
-            field[curCell.x+1][curCell.y+1].ifOpen = true
-            openedCells++
+            changeCellSettings(curCell.x+1, curCell.y+1)
           }
         }
       }
 
       if (curCell.y+1 < maxY) {
-        if (field[curCell.x][curCell.y+1].indicator === emptyIndicator && !field[curCell.x][curCell.y+1].ifOpen) {
+        if (field[curCell.x][curCell.y+1].indicator === emptyIndicator
+            && !field[curCell.x][curCell.y+1].ifOpen) {
+
           queue.push({x: curCell.x, y: curCell.y + 1})
 
         } else if (ifNotMineOrEmpty(field[curCell.x][curCell.y+1])) {
-          field[curCell.x][curCell.y+1].ifOpen = true
-          openedCells++
+          changeCellSettings(curCell.x, curCell.y+1)
         }
       }
 
       if (curCell.x-1 > -1) {
         if (curCell.y+1 < maxY) {
           if (ifNotMineOrEmpty(field[curCell.x-1][curCell.y+1])) {
-            field[curCell.x-1][curCell.y+1].ifOpen = true
-            openedCells++
+            changeCellSettings(curCell.x-1, curCell.y+1)
           }
         }
         
-        if (field[curCell.x-1][curCell.y].indicator === emptyIndicator && !field[curCell.x-1][curCell.y].ifOpen) {
+        if (field[curCell.x-1][curCell.y].indicator === emptyIndicator
+            && !field[curCell.x-1][curCell.y].ifOpen) {
+              
           queue.push({x: curCell.x-1, y: curCell.y})
 
         } else if (ifNotMineOrEmpty(field[curCell.x-1][curCell.y])) {
-          field[curCell.x-1][curCell.y].ifOpen = true
-          openedCells++
+          changeCellSettings(curCell.x-1, curCell.y)
         }
 
         if (curCell.y-1 > -1) {
           if (ifNotMineOrEmpty(field[curCell.x-1][curCell.y-1])) {
-            field[curCell.x-1][curCell.y-1].ifOpen = true
-            openedCells++
+            changeCellSettings(curCell.x-1, curCell.y-1)
           }
         }
       }
 
       if (curCell.y-1 > -1) {
-        if (field[curCell.x][curCell.y-1].indicator === emptyIndicator && !field[curCell.x][curCell.y-1].ifOpen) {
+        if (field[curCell.x][curCell.y-1].indicator === emptyIndicator
+            && !field[curCell.x][curCell.y-1].ifOpen) {
+
           queue.push({x: curCell.x, y: curCell.y-1})
 
         } else if (ifNotMineOrEmpty(field[curCell.x][curCell.y-1])) {
-          field[curCell.x][curCell.y-1].ifOpen = true
-          openedCells++
+          changeCellSettings(curCell.x, curCell.y-1)
         }
       }
     }
   } 
 
-  return openedCells
+  return {openedCells, flags}
 }
 
 export { getRandCellArr, prepareField, setOpenFields }

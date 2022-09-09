@@ -49,28 +49,26 @@ const useGameStyles = (cols: number) => {
   `
 
   const cell = css`
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    line-height: 30px;
     width: 30px;
     height: 30px;
     outline: 1px solid #b3a588;
     background-color: #edd197;
     transition: all 0.3s ease;
 
-    &.close {
-      border-right: 5px solid #b3a588;
-      border-top: 5px solid #f3e2be;
-      border-left: 5px solid #f3e2be;
-      border-bottom: 5px solid #b3a588;
-    }
-
     &:hover {
       cursor: pointer;
     }
   `
 
-  const cellOpen = css`
-    background-color: green;
+  const cellClose = css`
+    border-right: 5px solid #b3a588;
+    border-top: 5px solid #f3e2be;
+    border-left: 5px solid #f3e2be;
+    border-bottom: 5px solid #b3a588;
   `
 
   const btnRestart = css`
@@ -102,7 +100,7 @@ const useGameStyles = (cols: number) => {
     field,
     fieldHeader,
     cell,
-    cellOpen,
+    cellClose,
     btnRestart
   }
 }

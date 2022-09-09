@@ -24,4 +24,9 @@ const defaultLevel: TFieldKey = "junior"
 const mineIndicator = 9
 const emptyIndicator = 0
 
-export { settings, defaultLevel, mineIndicator, emptyIndicator }
+enum MARKS {
+  FLAG = 'flag',
+  QUEST = '?'
+}
+
+export { settings, defaultLevel, mineIndicator, emptyIndicator, MARKS }

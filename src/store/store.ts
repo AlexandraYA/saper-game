@@ -19,6 +19,8 @@ class SaperStore {
 
     this.prepareGame = this.prepareGame.bind(this)
     this.checkCell = this.checkCell.bind(this)
+    this.increaseFlags = this.increaseFlags.bind(this)
+    this.decreaseFlags = this.decreaseFlags.bind(this)
   }
 
   prepareGame(levelCode: string = defaultLevel) {
@@ -39,7 +41,9 @@ class SaperStore {
       this.gameOver = true
 
     } else if (this.field[cell.x][cell.y].indicator === emptyIndicator) {
-      this.openedCells += setOpenFields(cell, this.field)
+      const newData = setOpenFields(cell, this.field)
+      this.openedCells += newData.openedCells
+      this.minesCounter += newData.flags
     } else {
       this.field[cell.x][cell.y].ifOpen = true
       this.openedCells++
@@ -48,6 +52,16 @@ class SaperStore {
     if (this.ifUserWin) {
       this.gameOver = true
     }
+  }
+
+  increaseFlags() {
+    if (this.minesCounter < this.lvlSettings.mines - 1)
+      this.minesCounter++
+  }
+
+  decreaseFlags() {
+    if (this.minesCounter > 0)
+      this.minesCounter--
   }
 
   get ifUserWin() {

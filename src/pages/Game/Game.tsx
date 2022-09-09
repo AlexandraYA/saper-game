@@ -8,16 +8,21 @@ import { useGameStyles } from './Game.style'
 import ClockIcon from '../../assets/img/clock.png'
 import MineIcon from '../../assets/img/mine.png'
 import FlagIcon from '../../assets/img/flag.png'
+import { MARKS } from '../../store/data'
 
 const MineImage = () => (
   <img src={MineIcon} alt="mine"/>
 )
 
+const FlagImage = () => (
+  <img src={FlagIcon} alt="maybe mine"/>
+)
+
 
 const Game: React.FC = observer(() => {
   const { levelCode } = useParams()
-  const { prepareGame, lvlSettings, gameOver, 
-    field, minesCounter, timer, checkCell, ifUserWin  } = saperStore
+  const { prepareGame, lvlSettings, gameOver, increaseFlags, decreaseFlags,
+    field, minesCounter, timer, checkCell, ifUserWin } = saperStore
   
   const style = useGameStyles(lvlSettings.cols)
 
@@ -26,10 +31,31 @@ const Game: React.FC = observer(() => {
   },[levelCode])
 
   const handleClick = (cell: TCell) => {
-    if (gameOver) return
+    if (gameOver || cell.mark === MARKS.FLAG) return
 
     checkCell(cell)
-  }  
+  }
+
+  const handleRightClick = (e: any, cell: TCell) => {
+    e.preventDefault()
+    
+    if (!cell.ifOpen) {
+      switch (cell.mark) {
+        case MARKS.FLAG:
+          field[cell.x][cell.y].mark = MARKS.QUEST
+          increaseFlags()
+          break
+        case MARKS.QUEST:
+          field[cell.x][cell.y].mark = null
+          break
+        default:
+          if (minesCounter > 0) {
+            field[cell.x][cell.y].mark = MARKS.FLAG
+            decreaseFlags()
+          }
+      }
+    }
+  }
 
   const getCellInner = (indicator: number): number | string => {
     switch (indicator) {
@@ -45,11 +71,15 @@ const Game: React.FC = observer(() => {
     <div>
       <div css={style.fieldHeader}>
         <div>
-          <img src={FlagIcon} alt="flag"/>
+          <FlagImage />
           <span>{minesCounter}</span>
         </div>
         {!!gameOver && <div>
-          <button css={style.btnRestart} className={ifUserWin ? "win": "fail"} />
+          <button
+            css={style.btnRestart}
+            className={ifUserWin ? "win": "fail"}
+            onClick={() => prepareGame(levelCode)}
+          />
         </div>}
         <div>
           <span>{timer}</span>
@@ -59,8 +89,16 @@ const Game: React.FC = observer(() => {
       <div css={style.field}>
         {field.map((row: TCell[], ind: number) => {
           return row.map((cell: TCell, colInd: number) => (
-            <div key={ind+colInd} css={[style.cell, cell.ifOpen ? style.cellOpen : ""]} onClick={() => handleClick(cell)}>
-              {cell.indicator === 9 ? <MineImage /> : getCellInner(cell.indicator)}
+            <div
+              key={ind+colInd}
+              css={[style.cell, cell.ifOpen ? "" : style.cellClose]}
+              onClick={(e) => handleClick(cell)}
+              onContextMenu={(e) => handleRightClick(e, cell)}
+            >
+              {cell.ifOpen && cell.indicator === 9 && <MineImage />}
+              {cell.ifOpen && cell.indicator !== 9 && getCellInner(cell.indicator)}
+              {!cell.ifOpen && cell.mark === MARKS.FLAG && <FlagImage />}
+              {!cell.ifOpen && cell.mark === MARKS.QUEST && MARKS.QUEST}
             </div>
           ))
         })}
