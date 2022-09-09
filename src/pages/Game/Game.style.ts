@@ -34,7 +34,7 @@ const useGameStyles = (cols: number) => {
       vertical-align: bottom;
     }
 
-    & > div:first-child > span {
+    & > div:first-of-type > span {
       margin-left: 5px;
     }
 

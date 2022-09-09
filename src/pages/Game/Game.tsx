@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { settings, defaultLevel, mineIndicator, emptyIndicator } from '../../store/data'
-import { prepareField, setOpenFields } from '../../store/utils'
-import { TSettings, TFieldKey, TCell } from '../../store/types'
+import { observer } from 'mobx-react-lite'
+import { TCell } from '../../store/types'
+import saperStore from '../../store/store'
 import { useGameStyles } from './Game.style'
 import ClockIcon from '../../assets/img/clock.png'
 import MineIcon from '../../assets/img/mine.png'
@@ -14,50 +14,23 @@ const MineImage = () => (
 )
 
 
-const Game: React.FC = () => {
+const Game: React.FC = observer(() => {
   const { levelCode } = useParams()
-  const [ field, setField ] = useState<TCell[][]>([])
-  const [ minesCoords, setMinesCoords ] = useState<number[][]>([])
-  const [ curSettings, setCurSettings ] = useState<TSettings>()
-  const [ minesCounter, setMinesCounter ] = useState<number>(0)
-  const [ timer, setTimer ] = useState<number>(0)
-  const [ gameOver, setGameOver ] = useState<boolean>(false)
-
-  const style = useGameStyles(curSettings?.cols ? curSettings.cols : settings[defaultLevel].cols)
+  const { prepareGame, lvlSettings, gameOver,
+    field, minesCounter, timer, checkCell  } = saperStore
+  
+  const style = useGameStyles(lvlSettings.cols)
 
   useEffect(() => {
-
-    let _curSettings: TSettings = !!levelCode
-      ? settings[levelCode as TFieldKey] : settings[defaultLevel]
-
-    setCurSettings(_curSettings)
-    setMinesCounter(_curSettings?.mines)
-
-    let result = prepareField(_curSettings)
-    setField(result.field as TCell[][])
-    setMinesCoords(result.minesCoords as number[][])
-    setGameOver(false)
+    if (!!levelCode) {
+      prepareGame(levelCode)
+    }    
   },[levelCode])
-
 
   const handleClick = (cell: TCell) => {
     if (gameOver) return
 
-    let _field = [...field]
-
-    if (_field[cell.x][cell.y].indicator === mineIndicator) {
-      for (let i = 0; i < minesCoords.length; i++) {
-        _field[minesCoords[i][0]][minesCoords[i][1]].ifOpen = true
-      }
-      setGameOver(true)
-
-    } else if (_field[cell.x][cell.y].indicator === emptyIndicator) {
-      _field = setOpenFields(cell, _field)
-    } else {
-      _field[cell.x][cell.y].ifOpen = true
-    }  
-    
-    setField(_field)
+    checkCell(cell)
   }  
 
   const getCellInner = (indicator: number): number | string => {
@@ -93,6 +66,6 @@ const Game: React.FC = () => {
       </div>
     </div>
   )
-}
+})
 
 export { Game }
