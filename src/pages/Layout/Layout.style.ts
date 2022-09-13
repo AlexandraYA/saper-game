@@ -11,7 +11,7 @@ const useLayoutStyles = () => {
   `
 
   const container = css`
-    width: 900px;
+    width: 980px;
   `
 
   const header = css`

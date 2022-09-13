@@ -2,6 +2,8 @@ import { makeAutoObservable } from 'mobx'
 import { settings, defaultLevel, emptyIndicator, mineIndicator } from './data'
 import { TCell, TSettings, TFieldKey } from './types'
 import { prepareField, setOpenFields } from './utils'
+import timerStore from './timer'
+
 
 class SaperStore {
 
@@ -31,6 +33,7 @@ class SaperStore {
     this.minesCoords = result.minesCoords as number[][]
     this.gameOver = false
     this.openedCells = 0
+    timerStore.startTimer()
   }
 
   checkCell(cell: TCell) {
@@ -39,6 +42,7 @@ class SaperStore {
         this.field[this.minesCoords[i][0]][this.minesCoords[i][1]].ifOpen = true
       }
       this.gameOver = true
+      timerStore.stopTimer()
 
     } else if (this.field[cell.x][cell.y].indicator === emptyIndicator) {
       const newData = setOpenFields(cell, this.field)
@@ -51,6 +55,7 @@ class SaperStore {
 
     if (this.ifUserWin) {
       this.gameOver = true
+      timerStore.stopTimer()
     }
   }
 

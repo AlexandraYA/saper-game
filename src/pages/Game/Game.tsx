@@ -9,6 +9,8 @@ import ClockIcon from '../../assets/img/clock.png'
 import MineIcon from '../../assets/img/mine.png'
 import FlagIcon from '../../assets/img/flag.png'
 import { MARKS } from '../../store/data'
+import { Timer } from '../../components/Timer/Timer'
+
 
 const MineImage = () => (
   <img src={MineIcon} alt="mine"/>
@@ -22,7 +24,7 @@ const FlagImage = () => (
 const Game: React.FC = observer(() => {
   const { levelCode } = useParams()
   const { prepareGame, lvlSettings, gameOver, increaseFlags, decreaseFlags,
-    field, minesCounter, timer, checkCell, ifUserWin } = saperStore
+    field, minesCounter, checkCell, ifUserWin } = saperStore
   
   const style = useGameStyles(lvlSettings.cols)
 
@@ -66,7 +68,6 @@ const Game: React.FC = observer(() => {
     }
   }
 
-
   return (
     <div>
       <div css={style.fieldHeader}>
@@ -82,7 +83,7 @@ const Game: React.FC = observer(() => {
           />
         </div>}
         <div>
-          <span>{timer}</span>
+          <Timer />
           <img src={ClockIcon} alt="timer"/>
         </div>
       </div>
