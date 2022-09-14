@@ -20,6 +20,12 @@ const useLayoutStyles = () => {
     height: 80px;
     padding: 0 25px;
 
+    h1 {
+      font-size: 1.5em;
+      margin-block-start: 1em;
+      margin-block-end: 0.5em;
+    }
+
     h1 > a {
       text-decoration: none;
     }

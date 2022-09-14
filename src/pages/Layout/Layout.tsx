@@ -13,9 +13,9 @@ const Layout: React.FC<ILayout> = ({ children }) => {
     <div css={style.layout}>
       <div css={style.container}>
         <header css={style.header}>
-          <h2>
+          <h1>
             <Link to="/">Игра Сапер</Link>
-          </h2>
+          </h1>
           <nav>
             <ul css={style.menu}>
               <li><Link to="/junior">Новичок</Link></li>

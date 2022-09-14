@@ -95,6 +95,7 @@ const Game: React.FC = observer(() => {
               css={[style.cell, cell.ifOpen ? "" : style.cellClose]}
               onClick={(e) => handleClick(cell)}
               onContextMenu={(e) => handleRightClick(e, cell)}
+              data-testid="game-cell"
             >
               {cell.ifOpen && cell.indicator === 9 && <MineImage />}
               {cell.ifOpen && cell.indicator !== 9 && getCellInner(cell.indicator)}
