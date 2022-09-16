@@ -11,7 +11,7 @@ import { About } from './pages/About/About';
 
 function App() {
   return (
-    <Router>
+    <Router basename='/saper'>
       <Layout>
         <Routes>
           <Route path="/" element={<Game />} />
