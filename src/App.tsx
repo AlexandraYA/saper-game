@@ -16,8 +16,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Game />} />
           <Route path="/:levelCode" element={<Game />} />
-          <Route path="/:levelCode" element={<Game />} />
-          <Route path="/:levelCode" element={<Game />} />
           <Route path="/about" element={<About />} />
         </Routes>
       </Layout>
