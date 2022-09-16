@@ -127,6 +127,7 @@ describe('tests user interaction with field', () => {
     await userEvent.click(screen.getAllByTestId(/game-cell/i)[mineInd]);    
         
     expect(screen.getAllByAltText('mine')).toHaveLength(settings.junior.mines);
+    expect(screen.getByRole('button')).toBeInTheDocument();
   });
   
 
