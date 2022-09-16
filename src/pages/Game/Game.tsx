@@ -10,6 +10,7 @@ import MineIcon from '../../assets/img/mine.png'
 import FlagIcon from '../../assets/img/flag.png'
 import { MARKS } from '../../store/data'
 import { Timer } from '../../components/Timer/Timer'
+import { SerializedStyles } from "@emotion/react"
 
 
 const MineImage = () => (
@@ -59,6 +60,29 @@ const Game: React.FC = observer(() => {
     }
   }
 
+  const getCellColor = (indicator: number): SerializedStyles | string => {
+    switch (indicator) {
+      case 1:
+        return style.colorGreen
+      case 2:
+        return style.colorRed
+      case 3:
+        return style.colorPurple
+      case 4:
+        return style.colorBrown
+      case 5:
+        return style.colorGray
+      case 6:
+        return style.colorOrange
+      case 7:
+        return style.colorPink
+      case 8:
+        return style.colorBlue
+      default:
+        return ""
+    }
+  }
+
   const getCellInner = (indicator: number): number | string => {
     switch (indicator) {
       case 0:
@@ -92,7 +116,7 @@ const Game: React.FC = observer(() => {
           return row.map((cell: TCell, colInd: number) => (
             <div
               key={ind+colInd}
-              css={[style.cell, cell.ifOpen ? "" : style.cellClose]}
+              css={[style.cell, cell.ifOpen ? getCellColor(cell.indicator) : style.cellClose]}
               onClick={(e) => handleClick(cell)}
               onContextMenu={(e) => handleRightClick(e, cell)}
               data-testid="game-cell"

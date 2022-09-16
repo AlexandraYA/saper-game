@@ -96,12 +96,50 @@ const useGameStyles = (cols: number) => {
     }
   `
 
+  const colorGreen = css`
+    color: #4E047C;
+  `
+
+  const colorRed = css`
+    color: #8B0054;
+  `
+
+  const colorPurple = css`
+    color: #5A4A06;
+  `
+
+  const colorBrown = css`
+    color: #21087F;
+  `
+
+  const colorPink = css`
+    color: #463292;
+  `
+
+  const colorGray = css`
+    color: #682B8F;
+  `
+  const colorOrange = css`
+    color: #160C34;
+  `
+  const colorBlue = css`
+    color: #7A0CBF;
+  `
+
   return {
     field,
     fieldHeader,
     cell,
     cellClose,
-    btnRestart
+    btnRestart,
+    colorGreen,
+    colorRed,
+    colorPurple,
+    colorBrown,
+    colorGray,
+    colorOrange,
+    colorBlue,
+    colorPink
   }
 }
 
