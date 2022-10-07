@@ -1,5 +1,6 @@
 import { TSettings, TCell } from "./types"
 import { mineIndicator, emptyIndicator, MARKS } from './data'
+import { SerializedStyles } from "@emotion/react"
 
 
 const getRandCellArr = (amount: number, maxValue: number): number[] => {
@@ -201,4 +202,31 @@ const setOpenFields = (touchedCell: TCell, field: TCell[][]): Record<string, num
   return {openedCells, flags}
 }
 
-export { getRandCellArr, prepareField, setOpenFields }
+const getCellColor = (
+  indicator: number,
+  style: Record<string, any>
+): SerializedStyles | string => {
+
+  switch (indicator) {
+    case 1:
+      return style.colorGreen
+    case 2:
+      return style.colorRed
+    case 3:
+      return style.colorPurple
+    case 4:
+      return style.colorBrown
+    case 5:
+      return style.colorGray
+    case 6:
+      return style.colorOrange
+    case 7:
+      return style.colorPink
+    case 8:
+      return style.colorBlue
+    default:
+      return ""
+  }
+}
+
+export { getRandCellArr, prepareField, setOpenFields, getCellColor }
