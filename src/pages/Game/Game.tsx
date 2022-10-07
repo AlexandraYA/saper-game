@@ -32,9 +32,11 @@ const Game: React.FC = observer(() => {
     prepareGame(levelCode)
   },[levelCode])
 
-  const handleClick = (cell: TCell) => {
+  const handleClick = (e: any) => {
+    console.log(e.target.dataset['cellind'])
+    const coords = e.target.dataset['cellind'].split("-");
+    const cell = field[Number(coords[0])][Number(coords[1])]
     if (gameOver || cell.mark === MARKS.FLAG) return
-
     checkCell(cell)
   }
 
@@ -87,13 +89,12 @@ const Game: React.FC = observer(() => {
           <img src={ClockIcon} alt="timer"/>
         </div>
       </div>
-      <div css={style.field} onClick={(e: any) => console.log(e.target.dataset['cellind'])}>
+      <div css={style.field} onClick={handleClick}>
         {field.map((row: TCell[], ind: number) => {
           return row.map((cell: TCell, colInd: number) => (
             <div
               key={ind+colInd}
               css={[style.cell, cell.ifOpen ? getCellColor(cell.indicator, style) : style.cellClose]}
-              onClick={(e) => handleClick(cell)}
               onContextMenu={(e) => handleRightClick(e, cell)}
               data-testid="game-cell"
               data-cellind={`${ind}-${colInd}`}
